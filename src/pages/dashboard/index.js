@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,7 +18,13 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { mainListItems, secondaryListItems } from '../../components/menu-admin';
+import {useHistory} from 'react-router-dom';
+import {Button, TextField} from '@material-ui/core';
+
+import {containerForm, Form, Row} from './styles';
+import { Label, SettingsRemoteOutlined } from '@material-ui/icons';
 
 function Copyright() {
   return (
@@ -117,6 +123,12 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [nome, setNome] = useState('');
+  const history = useHistory();
+
+  console.log(nome)
+
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -152,9 +164,11 @@ export default function Dashboard() {
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
-            <Badge badgeContent={3} color="secondary">
-              <ChevronLeftIcon />
+          <IconButton onClick={() => {
+            history.push('/');
+          }} color="inherit">
+            <Badge color="secondary">
+              <SettingsIcon />
             </Badge>
           </IconButton>
         </Toolbar>
@@ -179,7 +193,38 @@ export default function Dashboard() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>          
+          <Grid container spacing={3}> 
+
+          <Container>
+          <h4>Cadastro de Produto</h4>
+          <hr/>
+            <containerForm>
+              <Form>
+                <Row>
+                  <Grid item xs={6} style={{margin: 5}}>
+                  <TextField
+                  name="nome"
+                  fullWidth
+                  value={nome}
+                  onChange={nome => setNome(nome.target.value)}
+                  label="Digite o nome do produto"
+                  variant='outlined'/>
+                </Grid>
+                <Grid item xs={6} style={{margin: 5}}>
+                  <TextField
+                  name="quantidade"
+                  fullWidth
+                  label="Digite a quantidade"
+                  variant='outlined' />
+                </Grid>
+                </Row>
+                <Row>
+                  <Button onClick={() => alert('enviei')} color="primary" variant='outlined' >ENVIAR</Button>
+                </Row>
+              </Form>
+            </containerForm>
+          </Container>
+
           </Grid>
           <Box pt={4}>
             <Copyright />

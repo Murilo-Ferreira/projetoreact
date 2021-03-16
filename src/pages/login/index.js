@@ -2,16 +2,34 @@
 import React, {useState} from 'react';
 import { TextField, Button} from '@material-ui/core';
 import { Container, BoxLogin, BoxTitle, BoxBody, Form, Row } from './styles';
+import {useHistory} from 'react-router-dom';
+
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
    console.log(email, password)
+
+   var history = useHistory();
+
+   const autorization = {
+      login: 'admin',
+      password: '12345'
+   }
+
+
   const handleSubmit = () => {
     const data = {
       login: email,
       password: password,
     }
+
+    if(autorization.login == data.login && autorization.password == data.password){
+      history.push('/dashboard');
+    }else{
+      alert('erro ao logar');
+    }
+
     console.log(data);
   }
   
@@ -39,6 +57,7 @@ function Login() {
                 <TextField id="outlined-basic"
                 fullWidth
                 label="Password"
+                type="password"
                 value={password}
                 onChange={password => setPassword(password.target.value)}
                 variant="outlined" />
