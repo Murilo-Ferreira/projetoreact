@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -23,14 +23,17 @@ import { mainListItems, secondaryListItems } from '../../components/menu-admin';
 import {useHistory} from 'react-router-dom';
 import {Button, TextField} from '@material-ui/core';
 
-import {containerForm, Form, Row} from './styles';
-import { Label, SettingsRemoteOutlined } from '@material-ui/icons';
+import { BoxForm, Row} from './styles';
+import { ErrorSharp, Label, SettingsRemoteOutlined } from '@material-ui/icons';
+import { useForm } from "react-hook-form";
+import {reactLocalStorage} from 'reactjs-localstorage';
+
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="javascript:;">
+      <Link color="inherit" to="">
         CIn
       </Link>{' '}
       {new Date().getFullYear()}
@@ -121,22 +124,39 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const { register, handleSubmit, errors } = useForm();
+  const [open, setOpen] = useState(true);
   const [name, setNome] = useState('');
+  const [list, setList] = useState([]);
+  const [listStorage, setListStorage] = useState([]);
+
   const history = useHistory();
+  const classes = useStyles();
+  
 
-  console.log(name)
+  useEffect(() => {
+    (async () => {
+      const result = JSON.parse(reactLocalStorage.get('list'));
+      setListStorage([...listStorage, result]);
+    })();
+  },[])
 
+  console.log(listStorage)
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
+  const onSubmit = async (data) => {
+    // ao clicar em enviar vem o objeto no data.
+    setList([...list, data]);
+    reactLocalStorage.setObject('list', list);
+  }
+
+  
+  const handleDrawer = () => {
+    setOpen(!open);
   };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -146,7 +166,7 @@ export default function Dashboard() {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={handleDrawer}
             className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
           >
             <MenuIcon />
@@ -181,7 +201,7 @@ export default function Dashboard() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton onClick={handleDrawer}>
             <ChevronLeftIcon />
           </IconButton>
         </div>
@@ -196,209 +216,66 @@ export default function Dashboard() {
           <Grid container style={{  margin: 0 }} spacing={75}>
 
           <Container>
-          <h4>Products Especifications</h4>
-          <hr/>
-            <containerForm>
-              <Form>                                 
+              <BoxForm>  
+                <form onSubmit={handleSubmit(onSubmit)}>                              
+                  <h4 >Products Especifications</h4>
+                  <hr style={{ marginBottom: 15 }}/>
+
                   <TextField
                   size="small"                  
-                  name="product-name"
+                  inputRef={register({required: true})}
+                  name="productName"
                   fullWidth
                   style={{  marginTop: 0 }}                  
-                  value={name}
-                  onChange={name => setNome(name.target.value)}
                   label="Product Name"
                   variant='filled' />
-
+                 
                   <TextField
                   size="small"
-                  name="intenal-name"
+                  name="intenalName"
                   fullWidth
+                  inputRef={register}
                   style={{  marginTop: 10 }}
                   label="Internal Name"
                   variant='filled' />   
 
                   <TextField
                   size="small"
-                  name="build-name"
+                  name="buildName"
                   fullWidth
+                  inputRef={register}
                   style={{  marginTop: 10 }}
-                  value={name}
                   label="Build Name"
-                  variant='filled'/>                     
-                </Form>
-                </containerForm>
+                  variant='filled'/>  
                 
-                <h4>Build Target</h4>
-                <hr/>
-                <containerForm>
-              <Form>                                 
-                  <TextField
-                  size="small"                  
-                  name="product-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  value={name}
-                  onChange={name => setNome(name.target.value)}
-                  label="Product Name"
-                  variant='filled'/>
+                           
 
-                  <TextField
-                  size="small"
-                  name="intenal-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  label="Internal Name"
-                  variant='filled' />   
-
-                  <TextField
-                  size="small"
-                  name="build-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  value={name}
-                  label="Build Name"
-                  variant='filled'/>                     
-                </Form>
-                </containerForm>
-
-                <h4>SKUs</h4>
-                <hr/>
-                <containerForm>
-              <Form>                                 
-                  <TextField
-                  size="small"                  
-                  name="product-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  value={name}
-                  onChange={name => setNome(name.target.value)}
-                  label="Product Name"
-                  variant='filled'/>
-
-                  <TextField
-                  size="small"
-                  name="intenal-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  label="Internal Name"
-                  variant='filled' />   
-
-                  <TextField
-                  size="small"
-                  name="build-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  value={name}
-                  label="Build Name"
-                  variant='filled'/>                     
-                </Form> 
-
-                <h4>Network Features</h4>
-                <hr/>
-                <containerForm>
-              <Form>                                 
-                  <TextField
-                  size="small"                  
-                  name="product-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  value={name}
-                  onChange={name => setNome(name.target.value)}
-                  label="Product Name"
-                  variant='filled'/>
-
-                  <TextField
-                  size="small"
-                  name="intenal-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  label="Internal Name"
-                  variant='filled' />   
-
-                  <TextField
-                  size="small"
-                  name="build-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  value={name}
-                  label="Build Name"
-                  variant='filled'/>                     
-                </Form>
-                </containerForm>
-
-                <h4>Product Label</h4>
-                <hr/>
-                <containerForm>
-              <Form>                                 
-                  <TextField
-                  size="small"                  
-                  name="product-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  value={name}
-                  onChange={name => setNome(name.target.value)}
-                  label="Product Name"
-                  variant='filled'/>
-
-                  <TextField
-                  size="small"
-                  name="intenal-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  label="Internal Name"
-                  variant='filled' />   
-
-                  <TextField
-                  size="small"
-                  name="build-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  value={name}
-                  label="Build Name"
-                  variant='filled'/>                     
-                </Form>
-                </containerForm> 
-
-                <h4>Moto Experiences</h4>
-                <hr/>
-                <containerForm>
-              <Form>                                 
-                  <TextField
-                  size="small"                  
-                  name="product-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  value={name}
-                  onChange={name => setNome(name.target.value)}
-                  label="Product Name"
-                  variant='filled'/>
-
-                  <TextField
-                  size="small"
-                  name="intenal-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  label="Internal Name"
-                  variant='filled' />   
-
-                  <TextField
-                  size="small"
-                  name="build-name"
-                  fullWidth
-                  style={{  marginTop: 10 }}
-                  value={name}
-                  label="Build Name"
-                  variant='filled'/>                     
-                </Form>
-                </containerForm>          
-
-                <Form>
                 <Row>
-                  <Button onClick={() => alert('Created!')} size="small" color="default" variant='contained' >Create</Button>                  
+                  <Button type="submit" size="small" color="default" variant='contained' >Create</Button>                  
                 </Row>
-              </Form>
-            </containerForm>
+                </form> 
+            </BoxForm>
+          </Container>
+
+          <Container>
+            <table>
+              <thead>
+                <th>nome</th>
+                <th>sobrenome</th>
+                <th>apelido</th>
+              </thead>
+              <tbody>
+                {listStorage.length && listStorage.map( value => (
+                    <tbody>
+                      <tr>
+                        <td>{value.productName}</td>
+                        <td>{value.intenalName}</td>
+                        <td>{value.buildName}</td>
+                      </tr>
+                    </tbody>                  
+                ))}
+              </tbody>
+            </table>
           </Container>
 
           </Grid>
