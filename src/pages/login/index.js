@@ -24,7 +24,7 @@ function Login() {
       password: password,
     }
 
-    if(autorization.login == data.login && autorization.password == data.password){
+    if(autorization.login === data.login && autorization.password === data.password){
       history.push('/dashboard');
     }else{
       alert('erro ao logar');

@@ -25,7 +25,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="javascript:;">
+      <Link color="inherit" to="">
         CIn
       </Link>{' '}
       {new Date().getFullYear()}
@@ -124,7 +124,6 @@ export default function Integrations() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,7 +12,6 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
 // import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -22,11 +21,11 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { mainListItems, secondaryListItems } from '../../components/menu-admin';
 import {useHistory} from 'react-router-dom';
 import {Button, TextField} from '@material-ui/core';
-
-import { BoxForm, Row} from './styles';
-import { ErrorSharp, Label, SettingsRemoteOutlined } from '@material-ui/icons';
-import { useForm } from "react-hook-form";
 import {reactLocalStorage} from 'reactjs-localstorage';
+import { BoxForm, Row} from './styles';
+// import { ErrorSharp, Label, SettingsRemoteOutlined } from '@material-ui/icons';
+import { useForm } from "react-hook-form";
+import {v4 as uuid} from 'uuidv4'
 
 
 function Copyright() {
@@ -43,6 +42,187 @@ function Copyright() {
 }
 
 const drawerWidth = 240;
+
+
+export default function Dashboard() {
+  const { register, handleSubmit } = useForm();
+  const [open, setOpen] = useState(true);
+  const [array, setArray] = useState([]);
+  const [storageWeb, setstorageWeb] = useState(null);
+
+  const history = useHistory();
+  const classes = useStyles();
+  
+ //popula tabela
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handlePopulate = useCallback( async () => {
+       return new Promise((resolve, reject) => {
+            const data = reactLocalStorage.get('list');
+            if(data){
+                resolve( JSON.parse(data) );
+            }else{
+                reject(data);
+            }
+        });
+  },[]);
+
+  //
+  useEffect(() => {
+    (async() => {
+        const resultado = await handlePopulate();
+        setstorageWeb(resultado);
+    })();
+  },[handlePopulate]);
+
+  //insere dentro do storage
+  useEffect(() => {
+    if(array.length > 0){
+      reactLocalStorage.setObject('list', array);
+    }
+  },[array]);
+
+  //recebe o dado do form e anexa ao array de objetos
+  const onSubmit = async (data) => {
+    data.key = uuid();
+    setArray([...array, data]);
+  }
+  
+  //fecha e abre coluna do dashboard
+  const handleDrawer = () => {
+    setOpen(!open);
+  };
+
+  console.log(storageWeb);
+  
+  return (
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+        <Toolbar className={classes.toolbar}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawer}
+            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+            Dashboard
+          </Typography>
+          <IconButton color="inherit">
+            <Badge badgeContent={1} color="secondary">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <IconButton color="inherit">
+            <Badge badgeContent={2} color="secondary">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <IconButton onClick={() => {
+            history.push('/');
+          }} color="inherit">
+            <Badge color="secondary">
+              <SettingsIcon />
+            </Badge>
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+        }}
+        open={open}
+      >
+        <div className={classes.toolbarIcon}>
+          <IconButton onClick={handleDrawer}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </div>
+        <Divider />
+        <List>{mainListItems}</List>
+        <Divider />
+        <List>{secondaryListItems}</List>
+      </Drawer>
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
+          
+
+          <Container>
+              <BoxForm>  
+                <form onSubmit={handleSubmit(onSubmit)}>                              
+                  <h4 >Products Especifications</h4>
+                  <hr style={{ marginBottom: 15 }}/>
+
+                  <TextField
+                  size="small"                  
+                  inputRef={register({required: true})}
+                  name="productName"
+                  fullWidth
+                  style={{  marginTop: 0 }}                  
+                  label="Product Name"
+                  variant='filled' />
+                 
+                  <TextField
+                  size="small"
+                  name="intenalName"
+                  fullWidth
+                  inputRef={register}
+                  style={{  marginTop: 10 }}
+                  label="Internal Name"
+                  variant='filled' />   
+
+                  <TextField
+                  size="small"
+                  name="buildName"
+                  fullWidth
+                  inputRef={register}
+                  style={{  marginTop: 10 }}
+                  label="Build Name"
+                  variant='filled'/>
+
+                <Row>
+                  <Button type="submit" size="small" color="default" variant='contained' >Create</Button>                  
+                </Row>
+                </form> 
+            </BoxForm>
+          </Container>
+
+          <Container>
+            <table>
+              <thead>
+                <tr>
+                <th>nome</th>
+                <th>sobrenome</th>
+                <th>apelido</th>
+                </tr>
+              </thead>
+              <tbody>
+                {storageWeb && storageWeb.map( (value) => {
+                    return (
+                    <tr key={value.key}>
+                    <td>{value.productName}</td>
+                    <td>{value.intenalName}</td>
+                    <td>{value.buildName}</td>
+                    </tr>
+                    )
+                })}
+              </tbody>
+            </table>
+          </Container>
+
+          <Box pt={4}>
+            <Copyright />
+          </Box>
+        </Container>
+      </main>
+    </div>
+  );
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -122,168 +302,3 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 }));
-
-export default function Dashboard() {
-  const { register, handleSubmit, errors } = useForm();
-  const [open, setOpen] = useState(true);
-  const [name, setNome] = useState('');
-  const [list, setList] = useState([]);
-  const [listStorage, setListStorage] = useState([]);
-
-  const history = useHistory();
-  const classes = useStyles();
-  
-
-  useEffect(() => {
-    (async () => {
-      const result = JSON.parse(reactLocalStorage.get('list'));
-      setListStorage([...listStorage, result]);
-    })();
-  },[])
-
-  console.log(listStorage)
-
-  const onSubmit = async (data) => {
-    // ao clicar em enviar vem o objeto no data.
-    setList([...list, data]);
-    reactLocalStorage.setObject('list', list);
-  }
-
-  
-  const handleDrawer = () => {
-    setOpen(!open);
-  };
-
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-  
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawer}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
-          </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={1} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <IconButton color="inherit">
-            <Badge badgeContent={2} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <IconButton onClick={() => {
-            history.push('/');
-          }} color="inherit">
-            <Badge color="secondary">
-              <SettingsIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawer}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container style={{  margin: 0 }} spacing={75}>
-
-          <Container>
-              <BoxForm>  
-                <form onSubmit={handleSubmit(onSubmit)}>                              
-                  <h4 >Products Especifications</h4>
-                  <hr style={{ marginBottom: 15 }}/>
-
-                  <TextField
-                  size="small"                  
-                  inputRef={register({required: true})}
-                  name="productName"
-                  fullWidth
-                  style={{  marginTop: 0 }}                  
-                  label="Product Name"
-                  variant='filled' />
-                 
-                  <TextField
-                  size="small"
-                  name="intenalName"
-                  fullWidth
-                  inputRef={register}
-                  style={{  marginTop: 10 }}
-                  label="Internal Name"
-                  variant='filled' />   
-
-                  <TextField
-                  size="small"
-                  name="buildName"
-                  fullWidth
-                  inputRef={register}
-                  style={{  marginTop: 10 }}
-                  label="Build Name"
-                  variant='filled'/>  
-                
-                           
-
-                <Row>
-                  <Button type="submit" size="small" color="default" variant='contained' >Create</Button>                  
-                </Row>
-                </form> 
-            </BoxForm>
-          </Container>
-
-          <Container>
-            <table>
-              <thead>
-                <th>nome</th>
-                <th>sobrenome</th>
-                <th>apelido</th>
-              </thead>
-              <tbody>
-                {listStorage.length && listStorage.map( value => (
-                    <tbody>
-                      <tr>
-                        <td>{value.productName}</td>
-                        <td>{value.intenalName}</td>
-                        <td>{value.buildName}</td>
-                      </tr>
-                    </tbody>                  
-                ))}
-              </tbody>
-            </table>
-          </Container>
-
-          </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
-        </Container>
-      </main>
-    </div>
-  );
-}
