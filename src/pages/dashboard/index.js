@@ -25,7 +25,7 @@ import {reactLocalStorage} from 'reactjs-localstorage';
 import { BoxForm, Row} from './styles';
 // import { ErrorSharp, Label, SettingsRemoteOutlined } from '@material-ui/icons';
 import { useForm } from "react-hook-form";
-import {v4 as uuid} from 'uuidv4'
+import {v4 as uuid} from 'uuid'
 
 
 function Copyright() {
@@ -48,41 +48,47 @@ export default function Dashboard() {
   const { register, handleSubmit } = useForm();
   const [open, setOpen] = useState(true);
   const [array, setArray] = useState([]);
-  const [storageWeb, setstorageWeb] = useState(null);
 
   const history = useHistory();
   const classes = useStyles();
   
  //popula tabela
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handlePopulate = useCallback( async () => {
-       return new Promise((resolve, reject) => {
-            const data = reactLocalStorage.get('list');
-            if(data){
-                resolve( JSON.parse(data) );
-            }else{
-                reject(data);
-            }
-        });
-  },[]);
+  const handlePopulate =  async () => {
+    return new Promise((resolve, reject) => {
+        const data = reactLocalStorage.get('list');
+        if(data){
+            resolve( JSON.parse(data) );
+        }else{
+            reject();
+        }
+    });
+  };
 
-  //
+  //primeiro loading
   useEffect(() => {
-    (async() => {
+    async function init() {
+      try {
         const resultado = await handlePopulate();
-        setstorageWeb(resultado);
-    })();
-  },[handlePopulate]);
+        console.log(resultado, 'result');
+        setArray([...array, ...resultado]); 
+      } catch (error) {
+        console.log('Nenhum dado');        
+      }   
+    } 
+    init();
+  },[]);
 
   //insere dentro do storage
   useEffect(() => {
+    console.log(array, '2');
     if(array.length > 0){
       reactLocalStorage.setObject('list', array);
     }
-  },[array]);
+  },[array]);  
 
   //recebe o dado do form e anexa ao array de objetos
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
+    console.log(data, '1')
     data.key = uuid();
     setArray([...array, data]);
   }
@@ -92,7 +98,8 @@ export default function Dashboard() {
     setOpen(!open);
   };
 
-  console.log(storageWeb);
+
+  
   
   return (
     <div className={classes.root}>
@@ -202,7 +209,7 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {storageWeb && storageWeb.map( (value) => {
+                {array && array.map( (value) => {
                     return (
                     <tr key={value.key}>
                     <td>{value.productName}</td>
