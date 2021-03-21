@@ -12,7 +12,6 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
-// import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -23,7 +22,7 @@ import {useHistory} from 'react-router-dom';
 import {Button, TextField} from '@material-ui/core';
 import {reactLocalStorage} from 'reactjs-localstorage';
 import { BoxForm, Row} from './styles';
-// import { ErrorSharp, Label, SettingsRemoteOutlined } from '@material-ui/icons';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { useForm } from "react-hook-form";
 import {v4 as uuid} from 'uuid'
 
@@ -118,23 +117,27 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Dashboard
           </Typography>
+
           <IconButton color="inherit">
             <Badge badgeContent={1} color="secondary">
               <NotificationsIcon />
             </Badge>
           </IconButton>
+
           <IconButton color="inherit">
-            <Badge badgeContent={2} color="secondary">
-              <NotificationsIcon />
+            <Badge badgeContent={0} color="secondary">
+              <SettingsIcon />
             </Badge>
           </IconButton>
+
           <IconButton onClick={() => {
             history.push('/');
           }} color="inherit">
             <Badge color="secondary">
-              <SettingsIcon />
+              <AccountCircleIcon />
             </Badge>
           </IconButton>
+
         </Toolbar>
       </AppBar>
       <Drawer
@@ -193,7 +196,7 @@ export default function Dashboard() {
                   variant='filled'/>
 
                 <Row>
-                  <Button type="submit" size="small" color="default" variant='contained' >Create</Button>                  
+                  <Button type="submit" size="small" style={{  marginTop: 10 }} color="default" variant='contained' >Create</Button>                  
                 </Row>
                 </form> 
             </BoxForm>
@@ -214,7 +217,9 @@ export default function Dashboard() {
                     <tr key={value.key}>
                     <td>{value.productName}</td>
                     <td>{value.intenalName}</td>
-                    <td>{value.buildName}</td>
+                    <td>
+                      <a href={value.buildName} target="_blamk"> {value.buildName}</a>
+                    </td>
                     </tr>
                     )
                 })}

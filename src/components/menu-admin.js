@@ -5,7 +5,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
-//import BarChartIcon from '@material-ui/icons/BarChart';
+import MobileFriendlyIcon from '@material-ui/icons/MobileFriendly';
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import AddToHomeScreenIcon from '@material-ui/icons/AddToHomeScreen';
+import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
+import DeviceHubIcon from '@material-ui/icons/DeviceHub';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
@@ -17,30 +21,35 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItem>
+
+    <ListItem button component="a" href="/integrations" >
+      <ListItemIcon>
+        <AddToHomeScreenIcon />
+      </ListItemIcon>
+      <ListItemText primary="Product Register" />
+    </ListItem>
+
     <ListItem button component="a" href="/product-information" >
       <ListItemIcon>
-        <DashboardIcon />
+        <MobileFriendlyIcon />
       </ListItemIcon>
-      <ListItemText primary="Product Information" />
-    </ListItem>
-    <ListItem button component="a" href="/test-plans">
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Test Plans" />
+
+      <ListItemText primary="Products Informations" />
     </ListItem>
     <ListItem button component="a" href="/test-cases" >
       <ListItemIcon>
-        <DashboardIcon />
+        <ListAltIcon />
       </ListItemIcon>
       <ListItemText primary="Test Cases" />
     </ListItem>
-    <ListItem button component="a" href="/integrations" >
+
+    <ListItem button component="a" href="/test-plans">
       <ListItemIcon>
-        <LayersIcon />
+        <DynamicFeedIcon  />
       </ListItemIcon>
-      <ListItemText primary="Integrations" />
+      <ListItemText primary="Test Plans" />
     </ListItem>
+    
     <ListItem button component="a" href="/" >
       <ListItemIcon>
         <PeopleIcon />
@@ -57,19 +66,19 @@ export const secondaryListItems = (
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="Current month" />
+      <ListItemText primary="New Function" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="Last quarter" />
+      <ListItemText primary="Other New Function" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="Year-end" />
+      <ListItemText primary="Another New Function" />
     </ListItem>
   </div>
 );

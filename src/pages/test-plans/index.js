@@ -13,12 +13,14 @@ import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-// import Paper from '@material-ui/core/Paper';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import SettingsIcon from '@material-ui/icons/Settings';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from '../../components/menu-admin';
+
 
 function Copyright() {
   return (
@@ -124,6 +126,7 @@ export default function TestPlans() {
     setOpen(false);
   };
 
+  
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -142,8 +145,21 @@ export default function TestPlans() {
             Test Plans
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
+            <Badge badgeContent={1} color="secondary">
               <NotificationsIcon />
+            </Badge>
+
+          </IconButton>
+          <IconButton color="inherit">
+            <Badge badgeContent={0} color="secondary">
+              <SettingsIcon />
+            </Badge>
+          </IconButton>
+
+          <IconButton
+            color="inherit">
+            <Badge color="secondary">
+              <AccountCircleIcon />
             </Badge>
           </IconButton>
         </Toolbar>
