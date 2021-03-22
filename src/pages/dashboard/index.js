@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,13 +18,9 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { mainListItems, secondaryListItems } from '../../components/menu-admin';
-import {useHistory} from 'react-router-dom';
-import {Button, TextField} from '@material-ui/core';
-import {reactLocalStorage} from 'reactjs-localstorage';
-import { BoxForm, Row} from './styles';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { useForm } from "react-hook-form";
-import {v4 as uuid} from 'uuid'
+import {useHistory} from 'react-router-dom';
+
 
 
 function Copyright() {
@@ -44,54 +40,12 @@ const drawerWidth = 240;
 
 
 export default function Dashboard() {
-  const { register, handleSubmit } = useForm();
   const [open, setOpen] = useState(true);
-  const [array, setArray] = useState([]);
-
-  const history = useHistory();
+  
   const classes = useStyles();
+  const history = useHistory();
   
- //popula tabela
-  const handlePopulate =  async () => {
-    return new Promise((resolve, reject) => {
-        const data = reactLocalStorage.get('list');
-        if(data){
-            resolve( JSON.parse(data) );
-        }else{
-            reject();
-        }
-    });
-  };
-
-  //primeiro loading
-  useEffect(() => {
-    async function init() {
-      try {
-        const resultado = await handlePopulate();
-        console.log(resultado, 'result');
-        setArray([...array, ...resultado]); 
-      } catch (error) {
-        console.log('Nenhum dado');        
-      }   
-    } 
-    init();
-  },[]);
-
-  //insere dentro do storage
-  useEffect(() => {
-    console.log(array, '2');
-    if(array.length > 0){
-      reactLocalStorage.setObject('list', array);
-    }
-  },[array]);  
-
-  //recebe o dado do form e anexa ao array de objetos
-  const onSubmit = (data) => {
-    console.log(data, '1')
-    data.key = uuid();
-    setArray([...array, data]);
-  }
-  
+   
   //fecha e abre coluna do dashboard
   const handleDrawer = () => {
     setOpen(!open);
@@ -162,70 +116,7 @@ export default function Dashboard() {
         <Container maxWidth="lg" className={classes.container}>
           
 
-          <Container>
-              <BoxForm>  
-                <form onSubmit={handleSubmit(onSubmit)}>                              
-                  <h4 >Products Especifications</h4>
-                  <hr style={{ marginBottom: 15 }}/>
-
-                  <TextField
-                  size="small"                  
-                  inputRef={register({required: true})}
-                  name="productName"
-                  fullWidth
-                  style={{  marginTop: 0 }}                  
-                  label="Product Name"
-                  variant='filled' />
-                 
-                  <TextField
-                  size="small"
-                  name="intenalName"
-                  fullWidth
-                  inputRef={register}
-                  style={{  marginTop: 10 }}
-                  label="Internal Name"
-                  variant='filled' />   
-
-                  <TextField
-                  size="small"
-                  name="buildName"
-                  fullWidth
-                  inputRef={register}
-                  style={{  marginTop: 10 }}
-                  label="Build Name"
-                  variant='filled'/>
-
-                <Row>
-                  <Button type="submit" size="small" style={{  marginTop: 10 }} color="default" variant='contained' >Create</Button>                  
-                </Row>
-                </form> 
-            </BoxForm>
-          </Container>
-
-          <Container>
-            <table>
-              <thead>
-                <tr>
-                <th>nome</th>
-                <th>sobrenome</th>
-                <th>apelido</th>
-                </tr>
-              </thead>
-              <tbody>
-                {array && array.map( (value) => {
-                    return (
-                    <tr key={value.key}>
-                    <td>{value.productName}</td>
-                    <td>{value.intenalName}</td>
-                    <td>
-                      <a href={value.buildName} target="_blamk"> {value.buildName}</a>
-                    </td>
-                    </tr>
-                    )
-                })}
-              </tbody>
-            </table>
-          </Container>
+        
 
           <Box pt={4}>
             <Copyright />

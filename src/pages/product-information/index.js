@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
@@ -15,12 +14,26 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import SettingsIcon from '@material-ui/icons/Settings';
-// import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from '../../components/menu-admin';
+import {reactLocalStorage} from 'reactjs-localstorage';
+import {
+    Table,
+    TableRow,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableContainer,
+    Button
+} from '@material-ui/core';
+import {Edit, Delete } from '@material-ui/icons';
+
+//importa css de styles
+import {useStyles} from './styles';
+
 
 function Copyright() {
   return (
@@ -35,95 +48,37 @@ function Copyright() {
   );
 }
 
-const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  fixedHeight: {
-    height: 240,
-  },
-}));
 
 export default function ProductInformation() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
+  const classes = useStyles(); // css
+  const [open, setOpen] = React.useState(true); // botao abre e fecha sidebar
+  
+  const [array, setArray] = useState(null); //array q recebe dados do storage
+
+  //popula tabela
+  const handlePopulate =  async () => {
+    return new Promise((resolve, reject) => {
+        const data = reactLocalStorage.get('list');
+        if(data){
+            resolve( JSON.parse(data) );
+        }else{
+            reject();
+        }
+    });
   };
-  const handleDrawerClose = () => {
-    setOpen(false);
+
+  // primeiro loading da tela
+  useEffect(() => {
+    async function init(){
+        const result = await handlePopulate(); 
+        setArray(result);
+    } init();
+  },[])
+
+    //fecha e abre coluna do dashboard
+  const handleDrawer = () => {
+    setOpen(!open);
   };
 
   return (
@@ -135,7 +90,7 @@ export default function ProductInformation() {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={handleDrawer}
             className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
           >
             <MenuIcon />
@@ -173,7 +128,7 @@ export default function ProductInformation() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton onClick={handleDrawer}>
             <ChevronLeftIcon />
           </IconButton>
         </div>
@@ -185,7 +140,41 @@ export default function ProductInformation() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>          
+          <Grid container spacing={3}>  
+         
+         <h4>Lista de Produtos</h4>
+         <TableContainer className={classes.TopTable}>
+             <Table>
+                 <TableHead style={{background: '#000'}}>
+                     <TableRow>
+                         <TableCell style={{color: '#fff'}}>Nome produto</TableCell>
+                         <TableCell style={{color: '#fff'}}>Quantidade</TableCell>
+                         <TableCell style={{color: '#fff'}}>Cliente</TableCell>
+                         <TableCell style={{color: '#fff'}}>Ações</TableCell>
+                     </TableRow>
+                 </TableHead>
+                 <TableBody>
+                     {array && array.map(item => (
+                         <TableRow key={item.key}>
+                            <TableCell>{item.productName}</TableCell>
+                            <TableCell>{item.intenalName}</TableCell>
+                            <TableCell>{item.buildName}</TableCell>
+                            <TableCell>
+                                <Button color="primary" variant="contained" onClick={() => {}}>
+                                    <Edit size={ 30 }/>
+                                </Button>
+                                <Button color="secondary" variant="contained" style={{marginLeft:4}} onClick={() => {}}>
+                                    <Delete size={ 30 }/>
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                     ))}
+                 </TableBody>
+             </Table>
+         </TableContainer>
+
+         
+         
           </Grid>
           <Box pt={4}>
             <Copyright />
@@ -195,3 +184,4 @@ export default function ProductInformation() {
     </div>
   );
 }
+
