@@ -17,6 +17,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from '../../components/menu-admin';
 import {reactLocalStorage} from 'reactjs-localstorage';
@@ -84,7 +85,7 @@ export default function ProductInformation() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)} style={{ background: '#990005' }}>
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
@@ -139,32 +140,59 @@ export default function ProductInformation() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>  
+        <Container style={{padding:10}}>
+         
          
          <h4>Lista de Produtos</h4>
          <TableContainer className={classes.TopTable}>
              <Table>
                  <TableHead style={{background: '#000'}}>
                      <TableRow>
-                         <TableCell style={{color: '#fff'}}>Nome produto</TableCell>
-                         <TableCell style={{color: '#fff'}}>Quantidade</TableCell>
-                         <TableCell style={{color: '#fff'}}>Cliente</TableCell>
-                         <TableCell style={{color: '#fff'}}>Ações</TableCell>
+                         <TableCell style={{color: '#fff'}}>Internal mame</TableCell>
+                         <TableCell style={{color: '#fff'}}>Build name</TableCell>
+                         <TableCell style={{color: '#fff'}}>Network</TableCell>
+                         <TableCell style={{color: '#fff'}}>Platform</TableCell>
+                         <TableCell style={{color: '#fff'}}>OS</TableCell>
+                         <TableCell style={{color: '#fff'}}>Dimension</TableCell>
+                         <TableCell style={{color: '#fff'}}>display & Tp</TableCell>
+                         <TableCell style={{color: '#fff'}}>Rear Camera</TableCell>
+                         <TableCell style={{color: '#fff'}}>Front Camera</TableCell>
+                         <TableCell style={{color: '#fff'}}>Connectivity</TableCell>
+                         <TableCell style={{color: '#fff'}}>Memory Storage</TableCell>
+                         <TableCell style={{color: '#fff'}}>I/O</TableCell>
+                         <TableCell style={{color: '#fff'}}>Sensor</TableCell>
+                         <TableCell style={{color: '#fff'}}>Acoustics</TableCell>
+                         <TableCell style={{color: '#fff'}}>Physical Key</TableCell>
+                         <TableCell style={{color: '#fff'}}>Battery</TableCell>
+                         <TableCell style={{color: '#fff'}}>Others</TableCell>
+                         <TableCell style={{color: '#fff'}}>-</TableCell>
                      </TableRow>
                  </TableHead>
                  <TableBody>
                      {array && array.map(item => (
                          <TableRow key={item.key}>
-                            <TableCell>{item.productName}</TableCell>
-                            <TableCell>{item.intenalName}</TableCell>
+                            <TableCell>{item.InternalName}</TableCell>
                             <TableCell>{item.buildName}</TableCell>
+                            <TableCell>{item.network}</TableCell>
+                            <TableCell>{item.platform}</TableCell>
+                            <TableCell>{item.os}</TableCell>
+                            <TableCell>{item.dimension}</TableCell>
+                            <TableCell>{item.displayTp}</TableCell>
+                            <TableCell>{item.rearCamera}</TableCell>
+                            <TableCell>{item.frontCamera}</TableCell>
+                            <TableCell>{item.connectivity}</TableCell>
+                            <TableCell>{item.memory}</TableCell>
+                            <TableCell>{item.io}</TableCell>
+                            <TableCell>{item.sensor}</TableCell>
+                            <TableCell>{item.acoustics}</TableCell>
+                            <TableCell>{item.physicalKey}</TableCell>
+                            <TableCell>{item.battery}</TableCell>
+                            <TableCell>{item.others}</TableCell>
                             <TableCell>
-                                <Button color="primary" variant="contained" onClick={() => {}}>
-                                    <Edit size={ 30 }/>
-                                </Button>
-                                <Button color="secondary" variant="contained" style={{marginLeft:4}} onClick={() => {}}>
-                                    <Delete size={ 30 }/>
+                                <Button color="primary" variant="contained" onClick={() => {
+                                    console.log(item)
+                                }}>
+                                    <AttachFileIcon size={ 30 }/>
                                 </Button>
                             </TableCell>
                         </TableRow>
@@ -175,7 +203,6 @@ export default function ProductInformation() {
 
          
          
-          </Grid>
           <Box pt={4}>
             <Copyright />
           </Box>

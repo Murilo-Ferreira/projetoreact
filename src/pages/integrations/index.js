@@ -72,7 +72,7 @@ export default function Integrations() {
   },[]);
 
 
-// //insere dentro do storage
+ //insere dentro do storage
   useEffect(() => {
     console.log(array, '2');
     if(array.length > 0){
@@ -102,7 +102,7 @@ export default function Integrations() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)} style={{ background: '#990005' }}>
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
@@ -171,31 +171,164 @@ export default function Integrations() {
                 <TextField
                 size="small"                  
                 inputRef={register({required: true})}
-                name="productName"
+                name="InternalName"
                 fullWidth
                 style={{  marginTop: 0 }}                  
-                label="Product Name"
+                label="Internal mame"
                 variant='filled' />
                 
-                <TextField
-                size="small"
-                name="intenalName"
-                fullWidth
-                inputRef={register}
-                style={{  marginTop: 10 }}
-                label="Internal Name"
-                variant='filled' />             
-
                 <TextField
                 size="small"
                 name="buildName"
                 fullWidth
                 inputRef={register}
                 style={{  marginTop: 10 }}
-                label="Build Name"
+                label="Build name"
+                variant='filled' />             
+
+                <TextField
+                size="small"
+                name="network"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="Network"
                 variant='filled'/>
+
+                <TextField
+                size="small"
+                name="platform"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="Platform"
+                variant='filled'/>
+
+                <TextField
+                size="small"
+                name="os"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="OS"
+                variant='filled'/>
+
+                <TextField
+                size="small"
+                name="dimension"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="Dimension"
+                variant='filled'/>
+
+                <TextField
+                size="small"
+                name="displayTp"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="display & Tp"
+                variant='filled'/>
+
+                <TextField
+                size="small"
+                name="rearCamera"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="Rear Camera"
+                variant='filled'/>
+
+                <TextField
+                size="small"
+                name="frontCamera"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="Front Camera"
+                variant='filled'/>
+
+                 <TextField
+                size="small"
+                name="connectivity"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="Connectivity"
+                variant='filled'/>
+
+                <TextField
+                size="small"
+                name="memory"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="Memory Storage"
+                variant='filled'/>
+
+                <TextField
+                size="small"
+                name="io"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="I/O"
+                variant='filled'/>
+
+                <TextField
+                size="small"
+                name="sensor"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="Sensor"
+                variant='filled'/>
+
+                <TextField
+                size="small"
+                name="acoustics"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="Acoustics"
+                variant='filled'/>
+
+                <TextField
+                size="small"
+                name="physicalKey"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="Physical Key"
+                variant='filled'/>
+
+                <TextField
+                size="small"
+                name="battery"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="Battery"
+                variant='filled'/>
+
+                <TextField
+                size="small"
+                name="others"
+                fullWidth
+                inputRef={register}
+                style={{  marginTop: 10 }}
+                label="Others"
+                variant='filled'/>
+
+                <TextField 
+                type="file"
+                fullWidth
+                />
+
+
             
-                <Button type="submit" size="small" style={{  marginTop: 10 }} color="default" variant='contained' >Create</Button>                  
+                <Button type="submit" color="primary" size="small" style={{  marginTop: 10 }} variant='contained' >Create</Button>                  
            
             </form> 
         </Container>

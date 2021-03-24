@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    background: #ccc;
+    background: #f4f4f4;
     display:flex;
     height: 100vh;
     align-items:center;
@@ -12,7 +12,8 @@ export const BoxLogin = styled.div`
     width: 440px;
     /* height:400px; */
     background:#fff;
-    border-radius:18px;
+    border:solid 1px #959797;
+    border-radius:0px;
 `
 
 export const BoxTitle = styled.div`

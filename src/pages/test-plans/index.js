@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -20,6 +20,20 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from '../../components/menu-admin';
+import { useForm } from "react-hook-form";
+import {reactLocalStorage} from 'reactjs-localstorage';
+import {v4 as uuid} from 'uuid'
+import {
+    Table,
+    TableRow,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableContainer,
+    Button,
+    TextField,
+} from '@material-ui/core';
+
 
 
 function Copyright() {
@@ -33,6 +47,173 @@ function Copyright() {
       {'.'}
     </Typography>
   );
+}
+
+
+
+export default function TestCases() {
+  const { register, handleSubmit } = useForm();
+
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(true);
+  const [array, setArray] = useState([]);
+
+    //popula tabela
+  const handlePopulate =  async () => {
+    return new Promise((resolve, reject) => {
+        const data = reactLocalStorage.get('testPlans');
+        if(data){
+            resolve( JSON.parse(data) );
+        }else{
+            reject();
+        }
+    });
+  };
+
+   useEffect(() => {
+    async function init(){
+        setArray([])
+        const result = await handlePopulate(); 
+        console.log(result);
+        setArray([...array, ...result]);
+    } init();
+  },[]);
+
+   //insere dentro do storage
+  useEffect(() => {
+    if(array.length > 0){
+      reactLocalStorage.setObject('testPlans', array);
+    }  
+
+  },[array]); 
+
+    const onSubmit = (data, e) => {
+        data.key = uuid();
+        setArray([...array, data]);  
+         e.target.reset();   
+    }
+
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)} style={{ background: '#990005' }}>
+        <Toolbar className={classes.toolbar}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+            Test Cases
+          </Typography>
+          <IconButton color="inherit">
+            <Badge badgeContent={1} color="secondary">
+              <NotificationsIcon />
+            </Badge>
+
+          </IconButton>
+          <IconButton color="inherit">
+            <Badge badgeContent={0} color="secondary">
+              <SettingsIcon />
+            </Badge>
+          </IconButton>
+
+          <IconButton
+            color="inherit">
+            <Badge color="secondary">
+              <AccountCircleIcon />
+            </Badge>
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+        }}
+        open={open}
+      >
+        <div className={classes.toolbarIcon}>
+          <IconButton onClick={handleDrawerClose}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </div>
+        <Divider />
+        <List>{mainListItems}</List>
+        <Divider />
+        <List>{secondaryListItems}</List>
+      </Drawer>
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
+          
+           <h4>Registro test plans</h4>
+          <hr/>
+
+            <Container style={{margin:'30px 0px'}}>
+                <form onSubmit={handleSubmit(onSubmit)}>
+
+                <TextField
+                inputRef={register({required: true})}
+                name="testCase"
+                fullWidth
+                style={{  marginTop: 0 }}                  
+                label="Test Case"
+                variant='filled' />
+
+                <Button
+                type="submit"
+                color="primary"
+                size="small"
+                style={{  marginTop: 10 }}
+                variant='contained' >Create</Button>                  
+
+
+                </form>
+            </Container>
+
+            <Container>
+                <h4>Lista de Produtos</h4>
+                <TableContainer className={classes.TopTable}>
+                    <Table>
+                        <TableHead style={{background: '#000'}}>
+                            <TableRow>
+                                <TableCell style={{color:'#fff'}}>Link</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {array.map(item => (
+                                <TableRow key={item.key}>
+                                    <TableCell>
+                                        <a href="">{item.testCase}</a>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Container>
+
+
+          <Box pt={4}>
+            <Copyright />
+          </Box>
+        </Container>
+      </main>
+    </div>
+  );  
 }
 
 const drawerWidth = 240;
@@ -115,82 +296,3 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 }));
-
-export default function TestPlans() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
-  
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="#8F000000"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Test Plans
-          </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={1} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-
-          </IconButton>
-          <IconButton color="inherit">
-            <Badge badgeContent={0} color="secondary">
-              <SettingsIcon />
-            </Badge>
-          </IconButton>
-
-          <IconButton
-            color="inherit">
-            <Badge color="secondary">
-              <AccountCircleIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>          
-          </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
-        </Container>
-      </main>
-    </div>
-  );
-}
