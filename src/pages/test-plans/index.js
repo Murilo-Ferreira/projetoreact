@@ -116,7 +116,7 @@ export default function TestCases() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Test Cases
+            Test Plans
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={1} color="secondary">
@@ -159,7 +159,7 @@ export default function TestCases() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           
-           <h4>Registro test plans</h4>
+           <h4>Test Plan Register</h4>
           <hr/>
 
             <Container style={{margin:'30px 0px'}}>
@@ -185,7 +185,7 @@ export default function TestCases() {
             </Container>
 
             <Container>
-                <h4>Lista de Produtos</h4>
+                <h4>Test Plan Registered</h4>
                 <TableContainer className={classes.TopTable}>
                     <Table>
                         <TableHead style={{background: '#000'}}>

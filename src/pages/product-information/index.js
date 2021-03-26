@@ -143,7 +143,7 @@ export default function ProductInformation() {
         <Container style={{padding:10}}>
          
          
-         <h4>Lista de Produtos</h4>
+         <h4>Product List</h4>
          <TableContainer className={classes.TopTable}>
              <Table>
                  <TableHead style={{background: '#000'}}>

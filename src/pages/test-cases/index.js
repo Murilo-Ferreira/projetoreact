@@ -159,7 +159,7 @@ export default function TestCases() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           
-           <h4>Registro</h4>
+           <h4>Test Case Register</h4>
           <hr/>
 
             <Container style={{margin:'30px 0px'}}>
@@ -185,7 +185,7 @@ export default function TestCases() {
             </Container>
 
             <Container>
-                <h4>Lista de Produtos</h4>
+                <h4>Test Cases Registered</h4>
                 <TableContainer className={classes.TopTable}>
                     <Table>
                         <TableHead style={{background: '#000'}}>

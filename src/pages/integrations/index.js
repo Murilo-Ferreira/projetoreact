@@ -114,7 +114,7 @@ export default function Integrations() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Integrations
+            Product Register
           </Typography>
           
             <IconButton color="inherit">
@@ -160,7 +160,7 @@ export default function Integrations() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}> 
 
-          <h4>Registro</h4>
+          <h4>Register </h4>
           <hr/>
 
           <Container style={{margin:'30px 0px'}}>
