@@ -43,7 +43,7 @@ function Copyright() {
 
 
 
-export default function Integrations() {
+export default function ProductRegister() {
   const { register, handleSubmit } = useForm();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);

@@ -6,7 +6,7 @@ import Dashboard from '../pages/dashboard';
 import ProductInformation from '../pages/product-information';
 import TestPlans from '../pages/test-plans';
 import TestCases from '../pages/test-cases';
-import Integrations from '../pages/integrations';
+import ProductRegister from '../pages/product-register';
 
 // import { Container } from './styles';
 
@@ -18,7 +18,7 @@ function router() {
           <Route path="/product-information" exact component={ProductInformation} />
           <Route path="/test-plans" exact component={TestPlans} />
           <Route path="/test-cases" exact component={TestCases} />
-          <Route path="/integrations" exact component={Integrations} />
+          <Route path="/product-register" exact component={ProductRegister} />
       </Router>
   );
 }
