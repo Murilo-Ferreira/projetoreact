@@ -46,18 +46,17 @@ export default function Dashboard() {
   const history = useHistory();
   
    
-  //fecha e abre coluna do dashboard
+  //Abre e Fecha a Cluna do dashboard
   const handleDrawer = () => {
     setOpen(!open);
   };
 
 
-  
-  
+    
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)} style={{ background: '#990005' }}>
+      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)} style={{ background: '#990005' }} >
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
